@@ -16,34 +16,29 @@ const QuizPage = () => {
   const [isAnswerSelected, setIsAnswerSelected] = useState(false)
 
   useEffect(() => {
-    // Fetch the JSON data from the public directory
     fetch('/questions.json')
       .then(response => response.json())
       .then((rawData: QuestionType[]) => {
-        // Decode the URL-encoded data
         const decodedData = decodeData(rawData);
         setQuestions(decodedData);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
-  const stars = useMemo(() => {
-    const starsCount =
-      questions[questionNo]?.difficulty === "easy" ? 1
-        : questions[questionNo]?.difficulty === "medium" ? 2
-          : questions[questionNo]?.difficulty === "hard" ? 3 : 0
+  // const stars = useMemo(() => {
+  //   const starsCount =
+  //     questions[questionNo]?.difficulty === "easy" ? 1
+  //       : questions[questionNo]?.difficulty === "medium" ? 2
+  //         : questions[questionNo]?.difficulty === "hard" ? 3 : 0
 
 
-    console.log(starsCount)
+  //   console.log(starsCount)
 
-    const star = <IoIosStar />
-    return Array(starsCount).fill(star)
-  }, [questionNo, questions])
+  //   const star = <IoIosStar />
+  //   return Array(starsCount).fill(star)
+  // }, [questionNo, questions])
 
   const handleProceedNextQues = () => {
-    // console.log("q#", questionNo)
-    // console.log("total ques", questions.length)
-
     if (questionNo == questions.length - 1) {
       localStorage.setItem("tatalScore", JSON.stringify(score))
       router.push("/done")
@@ -53,7 +48,7 @@ const QuizPage = () => {
   }
 
   return (
-    <main className="min-h-screen relative">
+    <main className="h-screen relative">
       <ProgressBar totalQues={questions.length} attemptedQues={questionNo} />
 
       <div className="container">
@@ -62,18 +57,16 @@ const QuizPage = () => {
         </div>
         <p className="text-slate-500 mt-1">{questions[questionNo]?.category}</p>
 
-        <div className="py-10">
+        <div className="py-5">
           <p className="font-semibold sm:text-lg">{questions[questionNo]?.question}</p>
 
           <div className="flex gap-1 mt-2">
-            {stars.map((star) => (
-              <span>
-                {star}
-              </span>
-            ))}
+            <IoIosStar className={`text-black`} /> 
+            <IoIosStar className={`${questions[questionNo]?.difficulty === "easy" ? "text-slate-300": "text-black"}`} /> 
+            <IoIosStar className={`${questions[questionNo]?.difficulty === "easy" || questions[questionNo]?.difficulty === "medium" ? "text-slate-300": "text-black"}`} />
           </div>
 
-          <div className="py-10">
+          <div className="py-5">
             <AnswersComponent
               setScore={setScore}
               type={questions[questionNo]?.type}

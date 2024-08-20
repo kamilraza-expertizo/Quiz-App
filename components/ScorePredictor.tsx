@@ -22,7 +22,7 @@ const ScorePredictor = ({
 
 
   return (
-    <div className="w-full absolute bottom-0 left-0 py-5 px-10">
+    <div className="w-full fixed bottom-0 left-0 z-20 sm:py-5 py-2 sm:px-10 px-5 bg-gray-300 ">
       <div className="w-full flex justify-between items-center">
         <span>
           Score: {scorePercentage}%
@@ -33,7 +33,7 @@ const ScorePredictor = ({
           Max Score: {maxScorePercentage}%
         </span>
       </div>
-      <div className="border border-black rounded-md  overflow-hidden">
+      <div className="border border-black rounded-md  overflow-hidden bg-white">
         <div className="w-screen relative h-8">
           <div
             className="absolute top-0 left-0 z-30 bg-black h-full"

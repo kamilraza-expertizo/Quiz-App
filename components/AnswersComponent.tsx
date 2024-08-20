@@ -48,7 +48,7 @@ const AnswersComponent = ({
 
 
     <div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid sm:grid-cols-2 grid-cols-1 gap-5">
         {allAnswers?.map((answer, key) => (
           <div className={`
           ${answer === selectedAnswer && "!bg-black text-white"}

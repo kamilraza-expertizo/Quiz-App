@@ -9,7 +9,7 @@ const ProgressBar = ({ totalQues, attemptedQues }: ProgressBarProps) => {
   }, [attemptedQues])
 
   return (
-    <div className="w-full relative transition-all">
+    <div className="w-full fixed top-0 left-0 z-20 transition-all">
       <div className={`h-2 bg-gray-400`} style={{ width: `${width}vw` }}>
 
       </div>

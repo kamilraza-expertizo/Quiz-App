@@ -53,8 +53,6 @@ const QuizPage = () => {
     const maxScorePerc = +(((currScore + (totalQues - (attemptedQues + 1))) / totalQues) * 100).toFixed(2)
     const minScorePerc = +((currScore / (attemptedQues + 1)) * 100).toFixed(2)
 
-
-
     setScorePercentage(scorePerc)
     setMaxScorePercentage(maxScorePerc)
     setMinScorePercentage(minScorePerc)
@@ -73,68 +71,70 @@ const QuizPage = () => {
 
 
   return (
-    <main>
-      <ProgressBar totalQues={questions.length} attemptedQues={questionNo} />
+    <main className="flex-center">
+      <div className="max-w-[800px] w-full">
+        <ProgressBar totalQues={questions.length} attemptedQues={questionNo} />
 
-      <div className="container mb-16">
-        <div>
-          <h1 className="text-3xl font-bold">Question {questionNo + 1} of {questions.length}</h1>
-        </div>
+        <div className="container mb-16">
+          <div>
+            <h1 className="text-3xl font-bold">Question {questionNo + 1} of {questions.length}</h1>
+          </div>
 
-        {
-          isLoading 
-          ? 
-          <div className="relative max-w-full w-[300px] h-8  mt-1">
-            <Skeleton/>
-          </div>
-          :
-          <div className="text-slate-500 mt-1">
-            Entertainment:{" "}
-            <span>{questions[questionNo]?.category}</span>
-          </div>
-              }
-          <div className="py-5">
-            {isLoading ?
-            <div className="relative w-full max-w-[600px] h-8">
+          {
+            isLoading 
+            ? 
+            <div className="relative max-w-full w-[300px] h-8  mt-1">
               <Skeleton/>
             </div>
-            :    
-            <p className="font-semibold sm:text-lg">{questions[questionNo]?.question}</p>
-          }
+            :
+            <div className="text-slate-500 mt-1">
+              Entertainment:{" "}
+              <span>{questions[questionNo]?.category}</span>
+            </div>
+                }
+            <div className="py-5">
+              {isLoading ?
+              <div className="relative w-full max-w-[600px] h-8">
+                <Skeleton/>
+              </div>
+              :    
+              <p className="font-semibold sm:text-lg">{questions[questionNo]?.question}</p>
+            }
 
-          <div className="flex gap-1 mt-2">
-            <IoIosStar className={`text-black`} /> 
-            <IoIosStar className={`${questions[questionNo]?.difficulty === "easy" ? "text-slate-300": "text-black"}`} /> 
-            <IoIosStar className={`${questions[questionNo]?.difficulty === "easy" || questions[questionNo]?.difficulty === "medium" ? "text-slate-300": "text-black"}`} />
+            <div className="flex gap-1 mt-2">
+              <IoIosStar className={`text-black`} /> 
+              <IoIosStar className={`${questions[questionNo]?.difficulty === "easy" ? "text-slate-300": "text-black"}`} /> 
+              <IoIosStar className={`${questions[questionNo]?.difficulty === "easy" || questions[questionNo]?.difficulty === "medium" ? "text-slate-300": "text-black"}`} />
+            </div>
+
+            <div className="py-5">
+              <AnswersComponent
+                loading={isLoading}
+                onSelectAnswer={handleSetSelectedAnswer}
+                type={questions[questionNo]?.type}
+                correctAnswer={questions[questionNo]?.correct_answer}
+                incorrectAnswers={questions[questionNo]?.incorrect_answers}
+                setIsAnswerCorrect={setIsAnswerCorrect}
+                isAnswerSelected={isAnswerSelected}
+                setIsAnswerSelected={setIsAnswerSelected}
+                selectedAnswer={selectedAnswer}
+              />
+            </div>
           </div>
 
-          <div className="py-5">
-            <AnswersComponent
-              loading={isLoading}
-              onSelectAnswer={handleSetSelectedAnswer}
-              type={questions[questionNo]?.type}
-              correctAnswer={questions[questionNo]?.correct_answer}
-              incorrectAnswers={questions[questionNo]?.incorrect_answers}
-              setIsAnswerCorrect={setIsAnswerCorrect}
-              isAnswerSelected={isAnswerSelected}
-              setIsAnswerSelected={setIsAnswerSelected}
-              selectedAnswer={selectedAnswer}
-            />
+          <div className="w-full flex-center flex-col gap-3">
+            <p className="text-3xl">{isAnswerSelected ? isAnswerCorrect ? "Correct!" : "Sorry!" : ""}</p>
+
+            {isAnswerSelected && <button onClick={handleProceedNextQues} className="my-btn !font-normal">Next Question</button>}
           </div>
         </div>
 
-        <div className="w-full flex-center flex-col gap-3">
-          <p className="text-3xl">{isAnswerSelected ? isAnswerCorrect ? "Correct!" : "Sorry!" : ""}</p>
-
-          {isAnswerSelected && <button onClick={handleProceedNextQues} className="my-btn !font-normal">Next Question</button>}
-        </div>
+        <ScorePredictor 
+          scorePercentage={scorePercentage}
+          maxScorePercentage={maxScorePercentage}
+          minScorePercentage={minScorePercentage}
+        />
       </div>
-
-      <ScorePredictor 
-        scorePercentage={scorePercentage}
-        maxScorePercentage={maxScorePercentage}
-        minScorePercentage={minScorePercentage}
-      />
     </main>
   )
 }

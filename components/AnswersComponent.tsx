@@ -36,21 +36,21 @@ const AnswersComponent = ({
   }, [correctAnswer, incorrectAnswers])
 
   return (
-    <div>
-      <div className="grid sm:grid-cols-2 grid-cols-1 gap-5">
+    <div className="flex-center">
+      <div className="w-full grid sm:grid-cols-2 grid-cols-1 gap-5">
         {loading || allAnswers?.length === 0 
         ?  
         <>
-          <div className="relative w-full max-w-[300px] h-10">
+          <div className="relative w-full h-10">
             <Skeleton/>
           </div>
-          <div className="relative w-full max-w-[300px] h-10">
+          <div className="relative w-full h-10">
             <Skeleton/>
           </div>
-          <div className="relative w-full max-w-[300px] h-10">
+          <div className="relative w-full h-10">
             <Skeleton/>
           </div>
-          <div className="relative w-full max-w-[300px] h-10">
+          <div className="relative w-full h-10">
             <Skeleton/>
           </div>
         </>
@@ -59,7 +59,7 @@ const AnswersComponent = ({
             <div key={key} className={`
             ${answer === selectedAnswer && "!bg-black text-white"}
             ${isAnswerSelected ? answer === correctAnswer || answer === selectedAnswer ? "border-black" : "!border-slate-300 text-slate-600 bg-slate-100" : ""}
-            max-w-[300px] cursor-pointer p-2 border-2 border-black rounded-md bg-slate-200`} onClick={() => onSelectAnswer(answer)}>
+            w-full cursor-pointer p-2 border-2 border-black rounded-md bg-slate-200`} onClick={() => onSelectAnswer(answer)}>
               {answer}
             </div>
           ))}

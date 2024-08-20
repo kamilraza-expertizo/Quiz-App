@@ -50,7 +50,7 @@ const QuizPage = () => {
     }
 
     const scorePerc = ((currScore / totalQues) * 100)
-    const maxScorePerc = ((currScore + (totalQues - (attemptedQues + 1))) / totalQues) * 100
+    const maxScorePerc = +(((currScore + (totalQues - (attemptedQues + 1))) / totalQues) * 100).toFixed(2)
     const minScorePerc = +((currScore / (attemptedQues + 1)) * 100).toFixed(2)
 
 

@@ -6,59 +6,114 @@ import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { decodeData } from '@/utils';
 import { IoIosStar } from "react-icons/io"
+import { BiLoader } from "react-icons/bi"
+import Skeleton from "@/components/Skeleton"
 
 const QuizPage = () => {
   const router = useRouter()
-  const [score, setScore] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+  const [score, setScore] = useState<number>(0)
   const [questions, setQuestions] = useState<QuestionType[]>([])
-  const [questionNo, setQuestionNo] = useState(0)
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
-  const [isAnswerSelected, setIsAnswerSelected] = useState(false)
+  const [questionNo, setQuestionNo] = useState<number>(0)
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false)
+  const [isAnswerSelected, setIsAnswerSelected] = useState<boolean>(false)
+  const [selectedAnswer, setSelectedAnswer] = useState<string>("")
+  const [scorePercentage, setScorePercentage] = useState<number>(0)
+  const [maxScorePercentage, setMaxScorePercentage] = useState<number>(100)
+  const [minScorePercentage, setMinScorePercentage] = useState<number>(0)
 
   useEffect(() => {
+    setIsLoading(true)
     fetch('/questions.json')
       .then(response => response.json())
       .then((rawData: QuestionType[]) => {
         const decodedData = decodeData(rawData);
         setQuestions(decodedData);
       })
-      .catch(error => console.error('Error fetching data:', error));
+      .catch(error => console.error('Error fetching data:', error))
+      .finally(()=>{
+        setIsLoading(false)
+      })
   }, []);
 
-  // const stars = useMemo(() => {
-  //   const starsCount =
-  //     questions[questionNo]?.difficulty === "easy" ? 1
-  //       : questions[questionNo]?.difficulty === "medium" ? 2
-  //         : questions[questionNo]?.difficulty === "hard" ? 3 : 0
+  const handleSetSelectedAnswer = (answer: string) => {
+    console.log("updateds")
+    let currScore = score; 
+    const totalQues = questions?.length;
+    const attemptedQues = questionNo;
+    const correctAnswer = questions[questionNo]?.correct_answer;
+    if (isAnswerSelected) return
+    setIsAnswerSelected(true)
+    setSelectedAnswer(answer)
+    if (answer === correctAnswer) {
+      setIsAnswerCorrect(true);
+      setScore((prevScore: number) => (prevScore + 1))
+      currScore++
+    }
+
+    const scorePerc = ((currScore / totalQues) * 100)
+    const maxScorePerc = ((currScore + (totalQues - (attemptedQues + 1))) / totalQues) * 100
+    const minScorePerc = +((currScore / (attemptedQues + 1)) * 100).toFixed(2)
+
+    console.log(scorePerc, maxScorePerc, minScorePerc)
 
 
-  //   console.log(starsCount)
-
-  //   const star = <IoIosStar />
-  //   return Array(starsCount).fill(star)
-  // }, [questionNo, questions])
+    setScorePercentage(scorePerc)
+    setMaxScorePercentage(maxScorePerc)
+    setMinScorePercentage(minScorePerc)
+  }
 
   const handleProceedNextQues = () => {
     if (questionNo == questions.length - 1) {
-      localStorage.setItem("tatalScore", JSON.stringify(score))
+
+      console.log("score ==> ",score)
+      // localStorage.setItem("totalScore", JSON.stringify(score))
       router.push("/done")
       return
     };
     setQuestionNo(questionNo + 1)
   }
 
+
+
   return (
-    <main className="h-screen relative">
+    <main className="">
+    {/* {isLoading 
+      ? 
+      <div className="flex-center h-screen">
+        <div>
+          <BiLoader className="text-xl animate-spin inline" /> <span>Please wait...</span>
+        </div> 
+      </div> */}
+      {/* :  */}
+      <>
       <ProgressBar totalQues={questions.length} attemptedQues={questionNo} />
 
-      <div className="container">
+      <div className="container mb-16">
         <div>
           <h1 className="text-3xl font-bold">Question {questionNo + 1} of {questions.length}</h1>
         </div>
-        <p className="text-slate-500 mt-1">{questions[questionNo]?.category}</p>
 
-        <div className="py-5">
-          <p className="font-semibold sm:text-lg">{questions[questionNo]?.question}</p>
+        {
+          isLoading 
+          ? 
+          <div className="relative max-w-full w-[300px] h-8  mt-1">
+            <Skeleton/>
+          </div>
+          :
+          <div className="text-slate-500 mt-1">
+            Entertainment:{" "}
+            <span>{questions[questionNo]?.category}</span>
+          </div>
+              }
+          <div className="py-5">
+            {isLoading ?
+            <div className="relative w-full max-w-[600px] h-8">
+              <Skeleton/>
+            </div>
+            :    
+            <p className="font-semibold sm:text-lg">{questions[questionNo]?.question}</p>
+          }
 
           <div className="flex gap-1 mt-2">
             <IoIosStar className={`text-black`} /> 
@@ -68,13 +123,14 @@ const QuizPage = () => {
 
           <div className="py-5">
             <AnswersComponent
-              setScore={setScore}
+              onSelectAnswer={handleSetSelectedAnswer}
               type={questions[questionNo]?.type}
               correctAnswer={questions[questionNo]?.correct_answer}
               incorrectAnswers={questions[questionNo]?.incorrect_answers}
               setIsAnswerCorrect={setIsAnswerCorrect}
               isAnswerSelected={isAnswerSelected}
               setIsAnswerSelected={setIsAnswerSelected}
+              selectedAnswer={selectedAnswer}
             />
           </div>
         </div>
@@ -82,11 +138,17 @@ const QuizPage = () => {
         <div className="w-full flex-center flex-col gap-3">
           <p className="text-3xl">{isAnswerSelected ? isAnswerCorrect ? "Correct!" : "Sorry!" : ""}</p>
 
-          {isAnswerSelected && <button onClick={handleProceedNextQues} className="my-btn !font-normal mb-16">Next Question</button>}
+          {isAnswerSelected && <button onClick={handleProceedNextQues} className="my-btn !font-normal">Next Question</button>}
         </div>
       </div>
 
-      <ScorePredictor totalQues={questions.length} attemptedQues={questionNo} userScore={score} />
+      <ScorePredictor 
+        scorePercentage={scorePercentage}
+        maxScorePercentage={maxScorePercentage}
+        minScorePercentage={minScorePercentage}
+      />
+    </>
+    {/* } */}
 
     </main>
   )

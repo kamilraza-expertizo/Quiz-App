@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react"
+import Skeleton from "./Skeleton"
 
 const AnswersComponent = ({
-  setScore,
+  onSelectAnswer,
   type,
   incorrectAnswers,
   correctAnswer,
   setIsAnswerCorrect,
   isAnswerSelected,
-  setIsAnswerSelected }: AnswersComponentProps) => {
+  setIsAnswerSelected, 
+  selectedAnswer }: AnswersComponentProps) => {
 
   const [allAnswers, setAllAnswers] = useState<string[]>([])
-  const [selectedAnswer, setSelectedAnswer] = useState("")
 
 
   const handleCreateAnswersArray = () => {
@@ -30,36 +31,38 @@ const AnswersComponent = ({
     setAllAnswers(answersArray)
   }
 
-  const handleSetSelectedAnswer = (answer: string) => {
-    if (isAnswerSelected) return
-    setIsAnswerSelected(true)
-    setSelectedAnswer(answer)
-    if (answer === correctAnswer) {
-      setIsAnswerCorrect(true);
-      setScore((prevScore: number) => (prevScore + 1))
-    }
-  }
-
   useEffect(() => {
     handleCreateAnswersArray()
   }, [correctAnswer, incorrectAnswers])
 
   return (
-
-
     <div>
       <div className="grid sm:grid-cols-2 grid-cols-1 gap-5">
-        {allAnswers?.map((answer, key) => (
-          <div className={`
-          ${answer === selectedAnswer && "!bg-black text-white"}
-          ${isAnswerSelected ? answer === correctAnswer || answer === selectedAnswer ? "border-black" : "!border-slate-300 text-slate-600 bg-slate-100" : ""}
-          max-w-[300px] cursor-pointer p-2 border-2 border-black rounded-md bg-slate-200`} onClick={() => handleSetSelectedAnswer(answer)}>
-            {answer}
+        {allAnswers?.length === 0 
+        ?  
+        <>
+          <div className="relative w-full max-w-[300px] h-10">
+            <Skeleton/>
           </div>
-        ))}
-      </div>
-
-      <div>
+          <div className="relative w-full max-w-[300px] h-10">
+            <Skeleton/>
+          </div>
+          <div className="relative w-full max-w-[300px] h-10">
+            <Skeleton/>
+          </div>
+          <div className="relative w-full max-w-[300px] h-10">
+            <Skeleton/>
+          </div>
+        </>
+        :
+          allAnswers?.map((answer, key) => (
+            <div key={key} className={`
+            ${answer === selectedAnswer && "!bg-black text-white"}
+            ${isAnswerSelected ? answer === correctAnswer || answer === selectedAnswer ? "border-black" : "!border-slate-300 text-slate-600 bg-slate-100" : ""}
+            max-w-[300px] cursor-pointer p-2 border-2 border-black rounded-md bg-slate-200`} onClick={() => onSelectAnswer(answer)}>
+              {answer}
+            </div>
+          ))}
       </div>
     </div>
   )

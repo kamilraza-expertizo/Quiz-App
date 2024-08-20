@@ -13,19 +13,20 @@ declare type ProgressBarProps = {
 }
 
 declare type ScorePredictorProps = {
-  totalQues: number,
-  attemptedQues: number
-  userScore: number
+  scorePercentage: number,
+  maxScorePercentage: number,
+  minScorePercentage: number
 }
 
 
 
 declare type AnswersComponentProps = {
-  setScore: any,
+  onSelectAnswer: any,
   type: string,
   incorrectAnswers: string[],
   correctAnswer: string,
   setIsAnswerCorrect: any
   isAnswerSelected: boolean,
-  setIsAnswerSelected: any
+  setIsAnswerSelected: any,
+  selectedAnswer: string
 }

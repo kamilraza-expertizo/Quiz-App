@@ -4,18 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const ScoreComponent = () => {
-  const router = useRouter()
   const [totalScore, setTotalScore] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
     const score = localStorage.getItem("totalScore")
     const name = localStorage.getItem("username")
-
-    if (!name || !score) {
-      router.push("/")
-      return;
-    }
 
     setTotalScore(score);
     setUsername(name);

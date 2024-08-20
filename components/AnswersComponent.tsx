@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import Skeleton from "./Skeleton"
 
 const AnswersComponent = ({
+  loading,
   onSelectAnswer,
   type,
   incorrectAnswers,
@@ -38,7 +39,7 @@ const AnswersComponent = ({
   return (
     <div>
       <div className="grid sm:grid-cols-2 grid-cols-1 gap-5">
-        {allAnswers?.length === 0 
+        {loading || allAnswers?.length === 0 
         ?  
         <>
           <div className="relative w-full max-w-[300px] h-10">

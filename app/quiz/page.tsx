@@ -123,6 +123,7 @@ const QuizPage = () => {
 
           <div className="py-5">
             <AnswersComponent
+              loading={isLoading}
               onSelectAnswer={handleSetSelectedAnswer}
               type={questions[questionNo]?.type}
               correctAnswer={questions[questionNo]?.correct_answer}

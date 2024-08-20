@@ -21,6 +21,7 @@ declare type ScorePredictorProps = {
 
 
 declare type AnswersComponentProps = {
+  loading: boolean;
   onSelectAnswer: any,
   type: string,
   incorrectAnswers: string[],

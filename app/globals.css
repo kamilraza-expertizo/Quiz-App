@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+.container {
+  @apply sm:px-20 sm:py-10 px-10 py-5;
+}
+
+.my-btn {
+  @apply bg-slate-700 text-white font-bold py-2 px-4 mt-5 rounded-md cursor-pointer hover:bg-slate-900 transition-all ;
+}

@@ -11,5 +11,5 @@
 }
 
 .my-btn {
-  @apply bg-slate-700 text-white font-bold py-2 px-4 mt-5 rounded-md cursor-pointer hover:bg-slate-900 transition-all ;
+  @apply bg-primary hover:bg-transparent text-white hover:text-primary border border-primary font-bold py-2 px-4 mt-5 rounded-md cursor-pointer transition-all ;
 }

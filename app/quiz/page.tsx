@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { decodeData } from '@/utils';
 import { IoIosStar } from "react-icons/io"
-import { BiLoader } from "react-icons/bi"
 import Skeleton from "@/components/Skeleton"
 
 const QuizPage = () => {
@@ -37,7 +36,6 @@ const QuizPage = () => {
   }, []);
 
   const handleSetSelectedAnswer = (answer: string) => {
-    console.log("updateds")
     let currScore = score; 
     const totalQues = questions?.length;
     const attemptedQues = questionNo;
@@ -55,7 +53,6 @@ const QuizPage = () => {
     const maxScorePerc = ((currScore + (totalQues - (attemptedQues + 1))) / totalQues) * 100
     const minScorePerc = +((currScore / (attemptedQues + 1)) * 100).toFixed(2)
 
-    console.log(scorePerc, maxScorePerc, minScorePerc)
 
 
     setScorePercentage(scorePerc)
@@ -66,8 +63,7 @@ const QuizPage = () => {
   const handleProceedNextQues = () => {
     if (questionNo == questions.length - 1) {
 
-      console.log("score ==> ",score)
-      // localStorage.setItem("totalScore", JSON.stringify(score))
+      localStorage.setItem("totalScore", JSON.stringify(score))
       router.push("/done")
       return
     };
@@ -77,16 +73,7 @@ const QuizPage = () => {
 
 
   return (
-    <main className="">
-    {/* {isLoading 
-      ? 
-      <div className="flex-center h-screen">
-        <div>
-          <BiLoader className="text-xl animate-spin inline" /> <span>Please wait...</span>
-        </div> 
-      </div> */}
-      {/* :  */}
-      <>
+    <main>
       <ProgressBar totalQues={questions.length} attemptedQues={questionNo} />
 
       <div className="container mb-16">
@@ -148,9 +135,6 @@ const QuizPage = () => {
         maxScorePercentage={maxScorePercentage}
         minScorePercentage={minScorePercentage}
       />
-    </>
-    {/* } */}
-
     </main>
   )
 }

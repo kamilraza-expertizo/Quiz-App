@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 
-const ProgressBar = ({ totalQues, attemptedQues }: ProgressBarProps) => {
+const ProgressBar = memo(({ totalQues, attemptedQues }: ProgressBarProps) => {
   const [width, setWidth] = useState<number>(0)
 
   useEffect(() => {
@@ -15,6 +15,6 @@ const ProgressBar = ({ totalQues, attemptedQues }: ProgressBarProps) => {
       </div>
     </div>
   )
-}
+})
 
 export default ProgressBar

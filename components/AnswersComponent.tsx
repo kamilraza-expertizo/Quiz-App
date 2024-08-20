@@ -22,9 +22,8 @@ const AnswersComponent = ({
 
     let count = 2;
     if (type === "multiple") count = 4;
-    // console.log("count==> ", count)
+
     const randomPos = Math.floor(Math.random() * count);
-    // console.log("random position==> ", randomPos)
     answersArray?.splice(randomPos, 0, correctAnswer)
 
     setIsAnswerSelected(false)

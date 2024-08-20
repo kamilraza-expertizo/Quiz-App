@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
+import { memo } from "react"
 
-const ScorePredictor = ({
+const ScorePredictor = memo(({
   scorePercentage,
   maxScorePercentage,
   minScorePercentage }: ScorePredictorProps) => {
-
+    
   return (
     <div className="w-full fixed bottom-0 left-0 z-20 sm:py-4 py-2 px-5 bg-gray-300 ">
       <div className="w-full flex justify-between items-center">
@@ -37,6 +37,6 @@ const ScorePredictor = ({
       </div>
     </div >
   )
-}
+})
 
 export default ScorePredictor

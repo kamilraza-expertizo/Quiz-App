@@ -7,9 +7,8 @@ const AnswersComponent = ({
   type,
   incorrectAnswers,
   correctAnswer,
-  setIsAnswerCorrect,
-  isAnswerSelected,
-  setIsAnswerSelected, 
+  // isAnswerSelected,
+  // setIsAnswerSelected, 
   selectedAnswer }: AnswersComponentProps) => {
 
   const [allAnswers, setAllAnswers] = useState<string[]>([])
@@ -26,8 +25,6 @@ const AnswersComponent = ({
     const randomPos = Math.floor(Math.random() * count);
     answersArray?.splice(randomPos, 0, correctAnswer)
 
-    setIsAnswerSelected(false)
-    setIsAnswerCorrect(false)
     setAllAnswers(answersArray)
   }
 
@@ -38,7 +35,7 @@ const AnswersComponent = ({
   return (
     <div className="flex-center">
       <div className="w-full grid sm:grid-cols-2 grid-cols-1 gap-5">
-        {loading || allAnswers?.length === 0 
+        {loading || !allAnswers?.length 
         ?  
         <>
           <div className="relative w-full h-10">
@@ -58,8 +55,8 @@ const AnswersComponent = ({
           allAnswers?.map((answer, key) => (
             <div key={key} className={`
             ${answer === selectedAnswer && "!bg-black text-white"}
-            ${isAnswerSelected ? answer === correctAnswer || answer === selectedAnswer ? "border-black" : "!border-slate-300 text-slate-600 bg-slate-100" : ""}
-            w-full cursor-pointer p-2 border-2 border-black rounded-md bg-slate-200`} onClick={() => onSelectAnswer(answer)}>
+            ${selectedAnswer && answer !== correctAnswer && "!border-slate-300 text-slate-600 bg-slate-100"}
+            w-full cursor-pointer p-2 border-2 border-black rounded-md text-black bg-slate-200`} onClick={() => onSelectAnswer(answer)}>
               {answer}
             </div>
           ))}

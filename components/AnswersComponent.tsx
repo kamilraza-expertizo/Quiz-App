@@ -7,8 +7,6 @@ const AnswersComponent = ({
   type,
   incorrectAnswers,
   correctAnswer,
-  // isAnswerSelected,
-  // setIsAnswerSelected, 
   selectedAnswer }: AnswersComponentProps) => {
 
   const [allAnswers, setAllAnswers] = useState<string[]>([])

@@ -39,7 +39,6 @@ const QuizPage = () => {
     const attemptedQues = questionNo;
     const correctAnswer = questions[questionNo]?.correct_answer;
     if (selectedAnswer) return
-    // setIsAnswerSelected(true)
     setSelectedAnswer(answer)
     if (answer === correctAnswer) {
       setScore((prevScore: number) => (prevScore + 1))

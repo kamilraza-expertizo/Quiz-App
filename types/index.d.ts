@@ -26,7 +26,5 @@ declare type AnswersComponentProps = {
   type: string,
   incorrectAnswers: string[],
   correctAnswer: string,
-  // isAnswerSelected: boolean,
-  // setIsAnswerSelected: any,
   selectedAnswer: string
 }

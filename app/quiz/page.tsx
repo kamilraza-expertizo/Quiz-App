@@ -14,8 +14,6 @@ const QuizPage = () => {
   const [score, setScore] = useState<number>(0)
   const [questions, setQuestions] = useState<QuestionType[]>([])
   const [questionNo, setQuestionNo] = useState<number>(0)
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false)
-  const [isAnswerSelected, setIsAnswerSelected] = useState<boolean>(false)
   const [selectedAnswer, setSelectedAnswer] = useState<string>("")
   const [scorePercentage, setScorePercentage] = useState<number>(0)
   const [maxScorePercentage, setMaxScorePercentage] = useState<number>(100)
@@ -40,11 +38,10 @@ const QuizPage = () => {
     const totalQues = questions?.length;
     const attemptedQues = questionNo;
     const correctAnswer = questions[questionNo]?.correct_answer;
-    if (isAnswerSelected) return
-    setIsAnswerSelected(true)
+    if (selectedAnswer) return
+    // setIsAnswerSelected(true)
     setSelectedAnswer(answer)
     if (answer === correctAnswer) {
-      setIsAnswerCorrect(true);
       setScore((prevScore: number) => (prevScore + 1))
       currScore++
     }
@@ -65,6 +62,7 @@ const QuizPage = () => {
       router.push("/done")
       return
     };
+    setSelectedAnswer("")
     setQuestionNo(questionNo + 1)
   }
 
@@ -114,18 +112,15 @@ const QuizPage = () => {
                 type={questions[questionNo]?.type}
                 correctAnswer={questions[questionNo]?.correct_answer}
                 incorrectAnswers={questions[questionNo]?.incorrect_answers}
-                setIsAnswerCorrect={setIsAnswerCorrect}
-                isAnswerSelected={isAnswerSelected}
-                setIsAnswerSelected={setIsAnswerSelected}
                 selectedAnswer={selectedAnswer}
               />
             </div>
           </div>
 
           <div className="w-full flex-center flex-col gap-3">
-            <p className="text-3xl">{isAnswerSelected ? isAnswerCorrect ? "Correct!" : "Sorry!" : ""}</p>
+            <p className="text-3xl">{selectedAnswer ? questions[questionNo].correct_answer === selectedAnswer ? "Correct!" : "Sorry!" : ""}</p>
 
-            {isAnswerSelected && <button onClick={handleProceedNextQues} className="my-btn !font-normal">Next Question</button>}
+            {selectedAnswer && <button onClick={handleProceedNextQues} className="my-btn !font-normal">Next Question</button>}
           </div>
         </div>
 

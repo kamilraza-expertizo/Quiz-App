@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 const UsernameForm = () => {
@@ -8,22 +8,27 @@ const UsernameForm = () => {
   const [name, setName] = useState("")
   const [error, setError] = useState("")
 
-  const handleError = (msg: string) => {
-    setError(msg)
-    setTimeout(() => {
-      setError("")
-    }, 3000);
-  }
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
-  const handleSaveName = (e: any) => {
+  const handleSaveName = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (name.length < 3) {
-      handleError("Name is required and must be minimum 3 characters or more.")
+      setError("Name is required and must be minimum 3 characters or more.")
       return;
     }
-    localStorage.setItem("username", name)
-    router.push("/quiz")
+
+    try {
+      localStorage.setItem("username", name);
+      router.push("/quiz");
+    } catch (err) {
+      setError("Unable to save name. Please try again.");
+    }
   }
 
   return (

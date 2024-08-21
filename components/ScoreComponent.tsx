@@ -7,8 +7,8 @@ const ScoreComponent = () => {
   const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
-    const score = localStorage.getItem("totalScore") || 0
-    const name = localStorage.getItem("username")
+    const score = +(localStorage.getItem("totalScore") ?? 0);
+    const name = localStorage.getItem("username") ?? "No name available";
 
     setTotalScore(+score);
     setUsername(name);
@@ -20,14 +20,14 @@ const ScoreComponent = () => {
         <h1 className='text-3xl font-bold mb-3'>Result</h1>
         <p>
           <span className="text-[#777777]">Name:{" "}</span>
-          {username || "No name available"}
+          {username}
         </p>
 
         <p>
           <span className="text-[#777777]">
             Total Score:{" "}
           </span>
-          <span className="text-primary">{totalScore || "No score available"}</span>
+          <span className="text-primary">{totalScore}</span>
         </p>
 
         <p>

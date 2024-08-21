@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Skeleton from "./Skeleton"
 
 const AnswersComponent = ({
@@ -12,7 +12,7 @@ const AnswersComponent = ({
   const [allAnswers, setAllAnswers] = useState<string[]>([])
 
 
-  const handleCreateAnswersArray = () => {
+  const handleCreateAnswersArray = useCallback(() => {
     const answersArray = incorrectAnswers
 
     if (answersArray?.includes(correctAnswer)) return;
@@ -24,7 +24,7 @@ const AnswersComponent = ({
     answersArray?.splice(randomPos, 0, correctAnswer)
 
     setAllAnswers(answersArray)
-  }
+  },[correctAnswer, incorrectAnswers, type])
 
   useEffect(() => {
     handleCreateAnswersArray()

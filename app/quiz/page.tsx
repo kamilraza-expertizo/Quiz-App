@@ -3,7 +3,7 @@ import AnswersComponent from "@/components/AnswersComponent"
 import ProgressBar from "@/components/ProgressBar"
 import ScorePredictor from "@/components/ScorePredictor"
 import { useRouter } from "next/navigation"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { decodeData } from '@/utils';
 import { IoIosStar } from "react-icons/io"
 import Skeleton from "@/components/Skeleton"
@@ -33,18 +33,20 @@ const QuizPage = () => {
       })
   }, []);
 
-  const handleSetSelectedAnswer = (answer: string) => {
-    let currScore = score; 
-    const totalQues = questions?.length;
-    const attemptedQues = questionNo;
-    const correctAnswer = questions[questionNo]?.correct_answer;
+  const handleSetSelectedAnswer = useCallback((answer: string) => {
     if (selectedAnswer) return
+
     setSelectedAnswer(answer)
-    if (answer === correctAnswer) {
+
+    let currScore = score; 
+
+    if (answer === questions[questionNo]?.correct_answer) {
       setScore((prevScore: number) => (prevScore + 1))
       currScore++
     }
 
+    const totalQues = questions?.length;
+    const attemptedQues = questionNo;
     const scorePerc = ((currScore / totalQues) * 100)
     const maxScorePerc = +(((currScore + (totalQues - (attemptedQues + 1))) / totalQues) * 100).toFixed(2)
     const minScorePerc = +((currScore / (attemptedQues + 1)) * 100).toFixed(2)
@@ -52,7 +54,7 @@ const QuizPage = () => {
     setScorePercentage(scorePerc)
     setMaxScorePercentage(maxScorePerc)
     setMinScorePercentage(minScorePerc)
-  }
+  },[selectedAnswer, score, questions, questionNo])
 
   const handleProceedNextQues = () => {
     if (questionNo == questions.length - 1) {

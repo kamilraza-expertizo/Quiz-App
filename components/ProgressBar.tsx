@@ -11,7 +11,6 @@ const ProgressBar = memo(({ totalQues, attemptedQues }: ProgressBarProps) => {
   return (
     <div className="w-full fixed top-0 left-0 z-20">
       <div className={`h-2 bg-gray-400 transition-all`} style={{ width: `${width}%` }}>
-
       </div>
     </div>
   )

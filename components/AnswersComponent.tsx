@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
-import Skeleton from "./Skeleton"
 
 const AnswersComponent = ({
-  loading,
   onSelectAnswer,
   type,
   incorrectAnswers,
@@ -10,7 +8,6 @@ const AnswersComponent = ({
   selectedAnswer }: AnswersComponentProps) => {
 
   const [allAnswers, setAllAnswers] = useState<string[]>([])
-
 
   const handleCreateAnswersArray = useCallback(() => {
     const answersArray = incorrectAnswers
@@ -30,31 +27,26 @@ const AnswersComponent = ({
     handleCreateAnswersArray()
   }, [correctAnswer, incorrectAnswers])
 
+  const getAnswerClassNames = useCallback((answer: string): string => {
+    const baseClass = "w-full cursor-pointer p-2 border-2 border-black rounded-md text-black bg-slate-200";
+
+    if (answer === selectedAnswer) {
+      return `${baseClass} !bg-black text-white`;
+    }
+
+    if (selectedAnswer && answer !== correctAnswer) {
+      return `${baseClass} !border-slate-300 text-slate-600 bg-slate-100`;
+    }
+
+    return baseClass;
+  }, [selectedAnswer, correctAnswer]);
+
   return (
     <div className="flex-center">
       <div className="w-full grid sm:grid-cols-2 grid-cols-1 gap-5">
-        {loading || !allAnswers?.length 
-        ?  
-        <>
-          <div className="relative w-full h-10">
-            <Skeleton/>
-          </div>
-          <div className="relative w-full h-10">
-            <Skeleton/>
-          </div>
-          <div className="relative w-full h-10">
-            <Skeleton/>
-          </div>
-          <div className="relative w-full h-10">
-            <Skeleton/>
-          </div>
-        </>
-        :
+        {
           allAnswers?.map((answer, key) => (
-            <div key={key} className={`
-            ${answer === selectedAnswer && "!bg-black text-white"}
-            ${selectedAnswer && answer !== correctAnswer && "!border-slate-300 text-slate-600 bg-slate-100"}
-            w-full cursor-pointer p-2 border-2 border-black rounded-md text-black bg-slate-200`} onClick={() => onSelectAnswer(answer)}>
+            <div key={key} className={getAnswerClassNames(answer)} onClick={() => onSelectAnswer(answer)}>
               {answer}
             </div>
           ))}

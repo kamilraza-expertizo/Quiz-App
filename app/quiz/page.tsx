@@ -7,31 +7,39 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { decodeData } from '@/utils';
 import { IoIosStar } from "react-icons/io"
 import Skeleton from "@/components/Skeleton"
+import AnswersSkeleton from "@/components/AnswersSkeleton"
 
 const QuizPage = () => {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [score, setScore] = useState<number>(0)
   const [questions, setQuestions] = useState<QuestionType[]>([])
   const [questionNo, setQuestionNo] = useState<number>(0)
   const [selectedAnswer, setSelectedAnswer] = useState<string>("")
-  const [scorePercentage, setScorePercentage] = useState<number>(0)
-  const [maxScorePercentage, setMaxScorePercentage] = useState<number>(100)
-  const [minScorePercentage, setMinScorePercentage] = useState<number>(0)
+  const [scoreDetails, setScoreDetails] = useState({
+    scorePercentage: 0,
+    maxScorePercentage: 100,
+    minScorePercentage: 0
+  })
 
   useEffect(() => {
-    setIsLoading(true)
-    fetch('/questions.json')
-      .then(response => response.json())
-      .then((rawData: QuestionType[]) => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await fetch("/questions.json");
+        const rawData = await response.json();
         const decodedData = decodeData(rawData);
         setQuestions(decodedData);
-      })
-      .catch(error => console.error('Error fetching data:', error))
-      .finally(()=>{
-        setIsLoading(false)
-      })
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuestions();
   }, []);
+
+
 
   const handleSetSelectedAnswer = useCallback((answer: string) => {
     if (selectedAnswer) return
@@ -47,13 +55,15 @@ const QuizPage = () => {
 
     const totalQues = questions?.length;
     const attemptedQues = questionNo;
-    const scorePerc = ((currScore / totalQues) * 100)
-    const maxScorePerc = +(((currScore + (totalQues - (attemptedQues + 1))) / totalQues) * 100).toFixed(2)
-    const minScorePerc = +((currScore / (attemptedQues + 1)) * 100).toFixed(2)
+    const scorePercentage = ((currScore / totalQues) * 100)
+    const maxScorePercentage = +(((currScore + (totalQues - (attemptedQues + 1))) / totalQues) * 100).toFixed(2)
+    const minScorePercentage = +((currScore / (attemptedQues + 1)) * 100).toFixed(2)
 
-    setScorePercentage(scorePerc)
-    setMaxScorePercentage(maxScorePerc)
-    setMinScorePercentage(minScorePerc)
+    setScoreDetails({
+      scorePercentage,
+      maxScorePercentage,
+      minScorePercentage,
+    });
   },[selectedAnswer, score, questions, questionNo])
 
   const handleProceedNextQues = () => {
@@ -64,10 +74,28 @@ const QuizPage = () => {
       return
     };
     setSelectedAnswer("")
-    setQuestionNo(questionNo + 1)
+    setQuestionNo(prev => prev + 1)
   }
 
+  const currentQues = useMemo(()=>{
+  return questions[questionNo]; 
+  },[questions, questionNo])
 
+  const starClasses = useMemo(() => {
+    if (!currentQues) return ["text-slate-300", "text-slate-300", "text-slate-300"];
+  
+    const difficultyClasses = {
+      easy: ["text-black", "text-slate-300", "text-slate-300"],
+      medium: ["text-black", "text-black", "text-slate-300"],
+      hard: ["text-black", "text-black", "text-black"]
+    };
+  
+    const difficulty: Difficulty = currentQues.difficulty as Difficulty;
+  
+    return difficultyClasses[difficulty] || ["text-slate-300", "text-slate-300", "text-slate-300"];
+  }, [currentQues]);
+  
+  
 
   return (
     <main className="flex-center">
@@ -88,7 +116,7 @@ const QuizPage = () => {
             :
             <div className="text-slate-500 mt-1">
               Entertainment:{" "}
-              <span>{questions[questionNo]?.category}</span>
+              <span>{currentQues?.category}</span>
             </div>
                 }
             <div className="py-5">
@@ -97,38 +125,43 @@ const QuizPage = () => {
                 <Skeleton/>
               </div>
               :    
-              <p className="font-semibold sm:text-lg">{questions[questionNo]?.question}</p>
+              <p className="font-semibold sm:text-lg">{currentQues?.question}</p>
             }
 
             <div className="flex gap-1 mt-2">
-              <IoIosStar className={`text-black`} /> 
-              <IoIosStar className={`${questions[questionNo]?.difficulty === "easy" ? "text-slate-300": "text-black"}`} /> 
-              <IoIosStar className={`${questions[questionNo]?.difficulty === "easy" || questions[questionNo]?.difficulty === "medium" ? "text-slate-300": "text-black"}`} />
+              {starClasses.map((starClass, index)=>(
+                <IoIosStar key={index} className={starClass} /> 
+              ))}
             </div>
 
             <div className="py-5">
-              <AnswersComponent
-                loading={isLoading}
-                onSelectAnswer={handleSetSelectedAnswer}
-                type={questions[questionNo]?.type}
-                correctAnswer={questions[questionNo]?.correct_answer}
-                incorrectAnswers={questions[questionNo]?.incorrect_answers}
-                selectedAnswer={selectedAnswer}
-              />
+              {
+                isLoading ?
+                  <AnswersSkeleton/>
+                 : 
+                  <AnswersComponent
+                    onSelectAnswer={handleSetSelectedAnswer}
+                    type={currentQues?.type}
+                    correctAnswer={currentQues?.correct_answer}
+                    incorrectAnswers={currentQues?.incorrect_answers}
+                    selectedAnswer={selectedAnswer}
+                  />
+              }
+
             </div>
           </div>
 
           <div className="w-full flex-center flex-col gap-3">
-            <p className="text-3xl">{selectedAnswer ? questions[questionNo].correct_answer === selectedAnswer ? "Correct!" : "Sorry!" : ""}</p>
+            <p className="text-3xl">{selectedAnswer ? currentQues.correct_answer === selectedAnswer ? "Correct!" : "Sorry!" : ""}</p>
 
             {selectedAnswer && <button onClick={handleProceedNextQues} className="my-btn !font-normal">Next Question</button>}
           </div>
         </div>
 
         <ScorePredictor 
-          scorePercentage={scorePercentage}
-          maxScorePercentage={maxScorePercentage}
-          minScorePercentage={minScorePercentage}
+          scorePercentage={scoreDetails.scorePercentage}
+          maxScorePercentage={scoreDetails.maxScorePercentage}
+          minScorePercentage={scoreDetails.minScorePercentage}
         />
       </div>
     </main>

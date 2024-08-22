@@ -1,4 +1,4 @@
-declare type QuestionType = {
+type QuestionType = {
   category: string,
   type: string
   difficulty: string,
@@ -7,24 +7,23 @@ declare type QuestionType = {
   incorrect_answers: string[]
 }
 
-declare type ProgressBarProps = {
+type ProgressBarProps = {
   totalQues: number,
   attemptedQues: number
 }
 
-declare type ScorePredictorProps = {
+type ScorePredictorProps = {
   scorePercentage: number,
   maxScorePercentage: number,
   minScorePercentage: number
 }
 
-
-
-declare type AnswersComponentProps = {
-  loading: boolean;
+type AnswersComponentProps = {
   onSelectAnswer: any,
   type: string,
   incorrectAnswers: string[],
   correctAnswer: string,
   selectedAnswer: string
 }
+
+type Difficulty = "easy" | "medium" | "hard";

@@ -1,6 +1,6 @@
 import Skeleton from "./Skeleton"
 
-const AnswersSkeleton = () => {
+const AnswersSkeleton:React.FC = () => {
   return (
     <div className="flex-center">
         <div className="w-full grid sm:grid-cols-2 grid-cols-1 gap-5">

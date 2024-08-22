@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react"
 
-const AnswersComponent = ({
+const AnswersComponent:React.FC<AnswersComponentProps> = ({
   onSelectAnswer,
   type,
   incorrectAnswers,
   correctAnswer,
-  selectedAnswer }: AnswersComponentProps) => {
+  selectedAnswer }) => {
 
   const [allAnswers, setAllAnswers] = useState<string[]>([])
 

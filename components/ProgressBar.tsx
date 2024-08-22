@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react"
 
-const ProgressBar = memo(({ totalQues, attemptedQues }: ProgressBarProps) => {
+const ProgressBar:React.MemoExoticComponent<React.FC<ProgressBarProps>> = memo(({ totalQues, attemptedQues }: ProgressBarProps) => {
   const [width, setWidth] = useState<number>(0)
 
   useEffect(() => {

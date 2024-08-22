@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
-const UsernameForm = () => {
+const UsernameForm:React.FC = () => {
   const router = useRouter()
-  const [name, setName] = useState("")
-  const [error, setError] = useState("")
+  const [name, setName] = useState<string>("")
+  const [error, setError] = useState<string>("")
 
   useEffect(() => {
     if (error) {
@@ -20,7 +20,7 @@ const UsernameForm = () => {
   const handleSaveName = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (name.length < 3) {
+    if (name.trim().length < 3) {
       setError("Name is required and must be minimum 3 characters or more.")
       return;
     }

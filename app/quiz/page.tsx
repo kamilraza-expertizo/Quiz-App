@@ -9,14 +9,18 @@ import { IoIosStar } from "react-icons/io"
 import Skeleton from "@/components/Skeleton"
 import AnswersSkeleton from "@/components/AnswersSkeleton"
 
-const QuizPage = () => {
+const QuizPage:React.FC = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [score, setScore] = useState<number>(0)
   const [questions, setQuestions] = useState<QuestionType[]>([])
   const [questionNo, setQuestionNo] = useState<number>(0)
   const [selectedAnswer, setSelectedAnswer] = useState<string>("")
-  const [scoreDetails, setScoreDetails] = useState({
+  const [scoreDetails, setScoreDetails] = useState<{
+    scorePercentage: number,
+    maxScorePercentage: number,
+    minScorePercentage: number
+  }>({
     scorePercentage: 0,
     maxScorePercentage: 100,
     minScorePercentage: 0
@@ -35,7 +39,6 @@ const QuizPage = () => {
         setIsLoading(false);
       }
     };
-
     fetchQuestions();
   }, []);
 

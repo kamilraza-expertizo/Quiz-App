@@ -1,6 +1,6 @@
-import { memo } from "react"
+import React, { memo } from "react"
 
-const ScorePredictor = memo(({
+const ScorePredictor: React.MemoExoticComponent<React.FC<ScorePredictorProps>> = memo(({
   scorePercentage,
   maxScorePercentage,
   minScorePercentage }: ScorePredictorProps) => {

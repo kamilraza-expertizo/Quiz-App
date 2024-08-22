@@ -1,8 +1,7 @@
 "use client";
-
 import { useEffect, useState } from 'react';
 
-const ScoreComponent = () => {
+const ScoreComponent:React.FC = () => {
   const [totalScore, setTotalScore] = useState<number | null>(null);
   const [username, setUsername] = useState<string | null>(null);
 
@@ -19,20 +18,20 @@ const ScoreComponent = () => {
       <div className="text-xl font-medium flex flex-col gap-2">
         <h1 className='text-3xl font-bold mb-3'>Result</h1>
         <p>
-          <span className="text-[#777777]">Name:{" "}</span>
+          <span className="text-[#777777]">Name:</span>
           {username}
         </p>
 
         <p>
           <span className="text-[#777777]">
-            Total Score:{" "}
+            Total Score:
           </span>
           <span className="text-primary">{totalScore}</span>
         </p>
 
         <p>
           <span className="text-[#777777]">
-            Status:{" "}
+            Status:
           </span>
           <span className="text-primary">{totalScore ? totalScore > 10 ? 
           <span className='text-green-600'>Passed</span>

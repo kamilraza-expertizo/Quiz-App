@@ -1,7 +1,7 @@
 import UsernameForm from "@/components/UsernameForm"
 import Image from "next/image"
 
-const Home = () => {
+const Home:React.FC = () => {
   return (
     <main className="flex-center min-h-screen">
       <div className="flex-center flex-col">

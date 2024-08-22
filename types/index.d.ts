@@ -12,7 +12,7 @@ type ProgressBarProps = {
   attemptedQues: number
 }
 
-type ScorePredictorProps = {
+type ScoreDetailsType = {
   scorePercentage: number,
   maxScorePercentage: number,
   minScorePercentage: number

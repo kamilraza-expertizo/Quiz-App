@@ -16,11 +16,7 @@ const QuizPage:React.FC = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([])
   const [questionNo, setQuestionNo] = useState<number>(0)
   const [selectedAnswer, setSelectedAnswer] = useState<string>("")
-  const [scoreDetails, setScoreDetails] = useState<{
-    scorePercentage: number,
-    maxScorePercentage: number,
-    minScorePercentage: number
-  }>({
+  const [scoreDetails, setScoreDetails] = useState<ScoreDetailsType>({
     scorePercentage: 0,
     maxScorePercentage: 100,
     minScorePercentage: 0
@@ -41,8 +37,6 @@ const QuizPage:React.FC = () => {
     };
     fetchQuestions();
   }, []);
-
-
 
   const handleSetSelectedAnswer = useCallback((answer: string) => {
     if (selectedAnswer) return
@@ -98,8 +92,6 @@ const QuizPage:React.FC = () => {
     return difficultyClasses[difficulty] || ["text-slate-300", "text-slate-300", "text-slate-300"];
   }, [currentQues]);
   
-  
-
   return (
     <main className="flex-center">
       <div className="max-w-[800px] w-full">

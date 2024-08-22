@@ -15,11 +15,8 @@ const UsernameForm:React.FC = () => {
     }
   }, [error]);
 
-
-
   const handleSaveName = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     if (name.trim().length < 3) {
       setError("Name is required and must be minimum 3 characters or more.")
       return;
